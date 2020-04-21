@@ -96,7 +96,7 @@ namespace CABS.Models
         public void Update(UAccaount ua, int? id)
         {
             cn.Open();
-            string cm = $"update U_Accaunt set RoleId = {ua.RoleId},FullName='{ua.FullName}',Gender='{ua.Gender}',FStatus'{ua.FStatus}',Age={ua.Age},CityZone='{ua.CityZone}',Login={ua.Login},Password='{ua.Password}' where id = {id}";
+            string cm = $"update U_Accaunt set RoleId = {ua.RoleId},FullName='{ua.FullName}',Gender='{ua.Gender}',FStatus'{ua.FStatus}',Age={ua.Age},CityZone='{ua.CityZone}',Login={ua.Login},Password='{ua.Password}' where id =";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();
@@ -118,6 +118,6 @@ namespace CABS.Models
         List<UAccaount> SelectAll();
         UAccaount SingleById(int? id);
         void Delete(int? id);
-        void Update(UAccaount ua);
+        void Update(UAccaount ua, int? id);
     }
 }
