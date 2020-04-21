@@ -120,4 +120,184 @@ namespace CABS.Models
         void Delete(int? id);
         void Update(UAccaount ua, int? id);
     }
+    class UApp : SCS, IUApp
+    {
+        public int id { get; set; }
+        public int UId { get; set; }
+        public double CreditSum { get; set; }
+        public string CreditGoal { get; set; }
+        public DateTime CreditDeadLine { get; set; }
+
+        private SqlConnection cn = new SqlConnection(CnSt);
+        public void Add(UApp ua)
+        {
+            cn.Open();
+            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine.Date}');";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            cd.ExecuteNonQuery();
+            cn.Close();
+        }
+
+        public void Delete(int? id)
+        {
+            cn.Open();
+            string cm = $"delete from U_App where id = {id}";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            cd.ExecuteNonQuery();
+            cn.Close();
+        }
+
+        public List<UApp> SelectAll()
+        {
+            cn.Open();
+            string cm = $"select * from U_App";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            SqlDataReader r = cd.ExecuteReader();
+            List<UApp> li = new List<UApp>();
+            while (r.Read())
+            {
+                li.Add(new UApp()
+                {
+                    id = int.Parse(r.GetValue("id").ToString()),
+                    UId = int.Parse(r.GetValue("UId").ToString()),
+                    CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
+                    CreditGoal = r.GetValue("CreditGoal").ToString(),
+                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString())
+                });
+            }
+            cn.Close();
+            return li;
+        }
+
+        public UApp SingleById(int? id)
+        {
+            cn.Open();
+            string cm = $"select * from U_App where id = {id}";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            SqlDataReader r = cd.ExecuteReader();
+            UApp ml = new UApp();
+            while (r.Read())
+            {
+                ml = new UApp()
+                {
+                    id = int.Parse(r.GetValue("id").ToString()),
+                    UId = int.Parse(r.GetValue("UId").ToString()),
+                    CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
+                    CreditGoal = r.GetValue("CreditGoal").ToString(),
+                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString())
+                };
+            }
+            cn.Close();
+            return ml;
+        }
+        public void Update(UApp ua, int? id)
+        {
+            cn.Open();
+            string cm = $"update U_App set CreditSum={ua.CreditSum}, CreditDeadLine = '{ua.CreditDeadLine}',CreditGoal = '{ua.CreditGoal}'";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            cd.ExecuteNonQuery();
+            cn.Close();
+        }
+    }
+    interface IUApp
+    {
+        int id { get; set; }
+        int UId { get; set; }
+        double CreditSum { get; set; }
+        string CreditGoal { get; set; }
+        DateTime CreditDeadLine { get; set; }
+        void Add(UApp ua);
+        List<UApp> SelectAll();
+        UApp SingleById(int? id);
+        void Delete(int? id);
+        void Update(UApp ua, int? id);
+    }
+    class UGraph : SCS, IUGraph
+    {
+        public int id { get; set; }
+        public int U_AppId { get; set; }
+        public double PMonth { get; set; }
+        public double Months { get; set; }
+        private SqlConnection cn = new SqlConnection(CnSt);
+        public void Add(UGraph ug)
+        {
+            cn.Open();
+            string cm = $"insert into U_Graph(PMonth,U_AppId,Months) Values({ug.PMonth},{ug.U_AppId},{ug.Months});";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            cd.ExecuteNonQuery();
+            cn.Close();
+        }
+
+        public void Delete(int? id)
+        {
+            cn.Open();
+            string cm = $"delete from U_Graph where id = {id}";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            cd.ExecuteNonQuery();
+            cn.Close();
+        }
+
+        public List<UGraph> SelectAll()
+        {
+            cn.Open();
+            string cm = $"select * from U_Graph";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            SqlDataReader r = cd.ExecuteReader();
+            List<UGraph> li = new List<UGraph>();
+            while (r.Read())
+            {
+                li.Add(new UGraph()
+                {
+                    id = int.Parse(r.GetValue("id").ToString()),
+                    Months = double.Parse(r.GetValue("Months").ToString()),
+                    PMonth = double.Parse(r.GetValue("PMonth").ToString()),
+                    U_AppId = int.Parse(r.GetValue("U_AppId").ToString())
+                });
+            }
+            cn.Close();
+            return li;
+        }
+
+        public UGraph SingleById(int? id)
+        {
+            cn.Open();
+            string cm = $"select * from U_Graph where id = {id}";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            SqlDataReader r = cd.ExecuteReader();
+            UGraph ml = new UGraph();
+            while (r.Read())
+            {
+                ml = new UGraph()
+                {
+                    id = int.Parse(r.GetValue("id").ToString()),
+                    Months = double.Parse(r.GetValue("Months").ToString()),
+                    PMonth = double.Parse(r.GetValue("PMonth").ToString()),
+                    U_AppId = int.Parse(r.GetValue("U_AppId").ToString())
+                };
+            }
+            cn.Close();
+            return ml;
+        }
+
+        public void Update(UGraph ua, int? id)
+        {
+            cn.Open();
+            string cm = $"update U_Graph set PMonth={ua.PMonth},Months={ua.Months}";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            cd.ExecuteNonQuery();
+            cn.Close();
+        }
+    }
+    interface IUGraph
+    {
+        int id { get; set; }
+        int U_AppId { get; set; }
+        double PMonth { get; set; }
+        double Months { get; set; }
+        void Add(UGraph ug);
+        List<UGraph> SelectAll();
+        UGraph SingleById(int? id);
+        void Delete(int? id);
+        void Update(UGraph ua, int? id);
+    }
 }
