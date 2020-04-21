@@ -38,5 +38,16 @@ namespace CABS
                     break;
             }
         }
+
+        private static void SingIn()
+        {
+            Console.Write("Login:");
+            int lg = int.Parse(Console.ReadLine());
+        }
+
+        private static void SingUp()
+        {
+
+        }
     }
 }

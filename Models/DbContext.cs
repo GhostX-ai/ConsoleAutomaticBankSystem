@@ -93,6 +93,32 @@ namespace CABS.Models
             return uas;
         }
 
+        public UAccaount SignIn(int Login, string Password)
+        {
+            cn.Open();
+            string cm = $"select * from U_Accaunt a join U_Roles p on a.RoleId = p.id where Login = {Login},Password='{Password}'";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            SqlDataReader r = cd.ExecuteReader();
+            UAccaount uas = new UAccaount();
+            while (r.Read())
+            {
+                uas = new UAccaount()
+                {
+                    id = int.Parse(r.GetValue("id").ToString()),
+                    RoleId = int.Parse(r.GetValue("RoleId").ToString()),
+                    Gender = r.GetValue("Gender").ToString(),
+                    Age = int.Parse(r.GetValue("Age").ToString()),
+                    CityZone = r.GetValue("CityZone").ToString(),
+                    FStatus = r.GetValue("FStatus").ToString(),
+                    FullName = r.GetValue("FullName").ToString(),
+                    Login = int.Parse(r.GetValue("Login").ToString()),
+                    Password = r.GetValue("Password").ToString(),
+                    Role = r.GetValue("Role").ToString()
+                };
+            }
+            cn.Close();
+            return uas;
+        }
         public void Update(UAccaount ua, int? id)
         {
             cn.Open();
