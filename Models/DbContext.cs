@@ -26,7 +26,7 @@ namespace CABS.Models
         public void Add(UAccaount ua)
         {
             cn.Open();
-            string cm = $"insert into U_Accaunt(RoleId,Fullname,Gender,FStatus,Age,CityZone,Login,Password,ICard) Values({ua.RoleId},'{ua.FullName}','{ua.Gender}','{ua.FStatus}',{ua.Age},'{ua.CityZone}',{ua.Login},'{ua.Password}','{ua.ICNum}')";
+            string cm = $"insert into U_Accaunt(RoleId,Fullname,Gender,FStatus,Age,CityZone,Login,Password,ICard) Values({ua.RoleId},'{ua.FullName}','{ua.Gender}','{ua.FStatus}',{ua.Age},'{ua.CityZone}',{ua.Login},'{ua.Password}','{ua.ICNum}');";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();
@@ -100,7 +100,7 @@ namespace CABS.Models
         public UAccaount SignIn(int Login, string Password)
         {
             cn.Open();
-            string cm = $"select * from U_Accaunt a join U_Roles p on a.RoleId = p.id where Login = {Login},Password='{Password}'";
+            string cm = $"select * from U_Accaunt a join U_Roles p on a.RoleId = p.id where Login = {Login} and Password='{Password}'";
             SqlCommand cd = new SqlCommand(cm, cn);
             SqlDataReader r = cd.ExecuteReader();
             UAccaount uas = new UAccaount();
@@ -156,6 +156,7 @@ namespace CABS.Models
         public int id { get; set; }
         public int UId { get; set; }
         public double CreditSum { get; set; }
+        public bool Status { get; set; }
         public string CreditGoal { get; set; }
         public DateTime CreditDeadLine { get; set; }
 
@@ -163,7 +164,7 @@ namespace CABS.Models
         public void Add(UApp ua)
         {
             cn.Open();
-            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine.Date}');";
+            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine,Status) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine.Date}',{ua.Status});";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();
@@ -193,7 +194,8 @@ namespace CABS.Models
                     UId = int.Parse(r.GetValue("UId").ToString()),
                     CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
-                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString())
+                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString()),
+                    Status = bool.Parse(r.GetValue("Status").ToString())
                 });
             }
             cn.Close();
@@ -215,7 +217,8 @@ namespace CABS.Models
                     UId = int.Parse(r.GetValue("UId").ToString()),
                     CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
-                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString())
+                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString()),
+                    Status = bool.Parse(r.GetValue("Status").ToString())
                 };
             }
             cn.Close();
@@ -235,6 +238,7 @@ namespace CABS.Models
         int id { get; set; }
         int UId { get; set; }
         double CreditSum { get; set; }
+        bool Status { get; set; }
         string CreditGoal { get; set; }
         DateTime CreditDeadLine { get; set; }
         void Add(UApp ua);

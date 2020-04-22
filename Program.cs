@@ -9,10 +9,36 @@ namespace CABS
         static void Main()
         {
             Welcoming();
+            if (ua != null)
+            {
+                if (ua.Role == "Client")
+                {
+                    ClientPart();
+                }
+            }
         }
+
+        private static void ClientPart()
+        {
+            Console.Write($"Welcome {ua.FullName}\n1 for add an application\n2 for show your history of applications\n3 for Exit\n");
+            int chs = int.Parse(Console.ReadLine());
+            if (chs == 1)
+            {
+                UApp uapp = new UApp();
+                Console.Write("Credit sum:");
+                uapp.CreditSum = double.Parse(Console.ReadLine());
+                Console.Write("Credit goal:");
+                uapp.CreditGoal = Console.ReadLine();
+                Console.Write("Credit deadline(yyyy-MM-dd)");
+                uapp.CreditDeadLine = DateTime.Parse(Console.ReadLine());
+                uapp.UId = ua.id;
+                uapp.Add(uapp);
+            }
+        }
+
         static void Welcoming()
         {
-            Console.Write("1-для регистрации\n2-для входа\n3-для выхода");
+            Console.Write("1-for SignUp\n2-for SignIn\n3-for Exit\n");
             int chs = 0;
             try
             {
@@ -38,33 +64,37 @@ namespace CABS
             }
         }
 
-        private static void SingIn()
+        private static void SingUp()
         {
             UAccaount ut = new UAccaount();
-            Console.Write("Login:");
+            Console.Write("Login(your numbers):");
             int lg = int.Parse(Console.ReadLine());
             string pass1 = Pass("Password");
             string pass2 = Pass("Repeat password");
             if (pass1 != pass2)
             {
-                Console.WriteLine("Пароли не одинаковые!");
+                Console.WriteLine("Passwords are not identity!");
                 SingIn();
             }
             else
             {
                 ut.Login = lg;
                 ut.Password = pass1;
-                Console.Write("Введите Ф.И.О:");
+                Console.Clear();
+                Console.Write("FullName:");
                 ut.FullName = Console.ReadLine();
-                Console.Write("Введите Пол(М/Ж):");
+                Console.Write("Gender(M/F):");
                 ut.Gender = Console.ReadLine();
-                Console.Write("Введиет семейное положение(женать/замужем/нет никого):");
+                Console.Write("Family status(married or not):");
                 ut.FStatus = Console.ReadLine();
-                Console.Write("Введиет ваш возраст:");
+                Console.Write("Age:");
                 ut.Age = int.Parse(Console.ReadLine());
-                Console.Write("Гражданство:");
+                Console.Write("Do you wont to be Admin?Y/N");
+                string chs = Console.ReadLine();
+                ut.RoleId = chs == "Y" ? 1 : 2;
+                Console.Write("CityZone:");
                 ut.CityZone = Console.ReadLine().ToLower();
-                Console.Write("Номер паспорта:");
+                Console.Write("Identity Card Number:");
                 ut.ICNum = Console.ReadLine();
                 ua.Add(ut);
                 ua = ut;
@@ -109,7 +139,7 @@ namespace CABS
             }
         }
 
-        private static void SingUp()
+        private static void SingIn()
         {
             Console.Write("Login:");
             int log = int.Parse(Console.ReadLine());
@@ -117,8 +147,8 @@ namespace CABS
             ua = ua.SignIn(log, pass);
             if (ua.id == 0 || ua == null)
             {
-                Console.WriteLine("Login или Password был неправельно введён!");
-                SingUp();
+                Console.WriteLine("Login or Password was not correct!");
+                SingIn();
             }
         }
     }
