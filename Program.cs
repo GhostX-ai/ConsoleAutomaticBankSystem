@@ -5,10 +5,10 @@ namespace CABS
 {
     class Program
     {
-        UAccaount ua = new UAccaount();
+        static UAccaount ua = new UAccaount();
         static void Main()
         {
-
+            Welcoming();
         }
         static void Welcoming()
         {
@@ -40,9 +40,35 @@ namespace CABS
 
         private static void SingIn()
         {
+            UAccaount ut = new UAccaount();
             Console.Write("Login:");
             int lg = int.Parse(Console.ReadLine());
-            Console.Write("Password:");
+            string pass1 = Pass("Password");
+            string pass2 = Pass("Repeat password");
+            if (pass1 != pass2)
+            {
+                Console.WriteLine("Пароли не одинаковые!");
+                SingIn();
+            }
+            else
+            {
+                ut.Login = lg;
+                ut.Password = pass1;
+                Console.Write("Введите Ф.И.О:");
+                ut.FullName = Console.ReadLine();
+                Console.Write("Введите Пол(М/Ж):");
+                ut.Gender = Console.ReadLine();
+                Console.Write("Введиет семейное положение(женать/замужем/нет никого):");
+                ut.FStatus = Console.ReadLine();
+                Console.Write("Введиет ваш возраст:");
+                ut.Age = int.Parse(Console.ReadLine());
+                Console.Write("Гражданство:");
+                ut.CityZone = Console.ReadLine().ToLower();
+                Console.Write("Номер паспорта:");
+                ut.ICNum = Console.ReadLine();
+                ua.Add(ut);
+                ua = ut;
+            }
         }
         static string Pass(string txt)
         {
@@ -85,7 +111,15 @@ namespace CABS
 
         private static void SingUp()
         {
-
+            Console.Write("Login:");
+            int log = int.Parse(Console.ReadLine());
+            string pass = Pass("Pass");
+            ua = ua.SignIn(log, pass);
+            if (ua.id == 0 || ua == null)
+            {
+                Console.WriteLine("Login или Password был неправельно введён!");
+                SingUp();
+            }
         }
     }
 }

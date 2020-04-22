@@ -20,11 +20,13 @@ namespace CABS.Models
         public int Login { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
+        public string ICNum { get; set; }
+
         private SqlConnection cn = new SqlConnection(CnSt);
         public void Add(UAccaount ua)
         {
             cn.Open();
-            string cm = $"insert into U_Accaunt(RoleId,Fullname,Gender,FStatus,Age,CityZone,Login,Password) Values({ua.RoleId},'{ua.FullName}','{ua.Gender}','{ua.FStatus}',{ua.Age},'{ua.CityZone}',{ua.Login},'{ua.Password}')";
+            string cm = $"insert into U_Accaunt(RoleId,Fullname,Gender,FStatus,Age,CityZone,Login,Password,ICard) Values({ua.RoleId},'{ua.FullName}','{ua.Gender}','{ua.FStatus}',{ua.Age},'{ua.CityZone}',{ua.Login},'{ua.Password}','{ua.ICNum}')";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();
@@ -59,7 +61,8 @@ namespace CABS.Models
                     FullName = r.GetValue("FullName").ToString(),
                     Login = int.Parse(r.GetValue("Login").ToString()),
                     Password = r.GetValue("Password").ToString(),
-                    Role = r.GetValue("Role").ToString()
+                    Role = r.GetValue("Role").ToString(),
+                    ICNum = r.GetValue("ICard").ToString()
                 });
             }
             cn.Close();
@@ -86,7 +89,8 @@ namespace CABS.Models
                     FullName = r.GetValue("FullName").ToString(),
                     Login = int.Parse(r.GetValue("Login").ToString()),
                     Password = r.GetValue("Password").ToString(),
-                    Role = r.GetValue("Role").ToString()
+                    Role = r.GetValue("Role").ToString(),
+                    ICNum = r.GetValue("ICard").ToString()
                 };
             }
             cn.Close();
@@ -132,6 +136,7 @@ namespace CABS.Models
     {
         int id { get; set; }
         int RoleId { get; set; }
+        string ICNum { get; set; }
         string FullName { get; set; }
         string Gender { get; set; }
         string FStatus { get; set; }
