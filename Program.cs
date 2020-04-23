@@ -144,7 +144,6 @@ namespace CABS
                     uapp.CreditGoal = Console.ReadLine();
                     Console.Write("How many month do you need?");
                     uapp.CreditDeadLine = double.Parse(Console.ReadLine());
-                    uapp.UId = ua.id;
                 c2:
                     Console.Write("You payment:");
                     try
