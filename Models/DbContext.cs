@@ -167,7 +167,8 @@ namespace CABS.Models
         public void Add(UApp ua)
         {
             cn.Open();
-            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine,Status,Pay) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine}',{ua.Status},{ua.Pay});";
+            int x = ua.Status ? 1 : 0;
+            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine,Status,Pay) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine}',{x},{ua.Pay});";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();
@@ -268,7 +269,7 @@ namespace CABS.Models
         double CreditSum { get; set; }
         bool Status { get; set; }
         string CreditGoal { get; set; }
-        DateTime CreditDeadLine { get; set; }
+        string CreditDeadLine { get; set; }
         void Add(UApp ua);
         List<UApp> SelectAll();
         UApp SingleById(int? id);
