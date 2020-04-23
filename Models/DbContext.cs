@@ -418,4 +418,45 @@ namespace CABS.Models
     //     string Condition { get; set; }
     //     int Point { get; set; }
     // }
+    // class ULApp : SCS, IULApp
+    // {
+    //     public int id { get; set; }
+    //     public DateTime datepayed { get; set; }
+    //     public bool payed { get; set; }
+    //     public int appid { get; set; }
+    //     private SqlConnection cn = new SqlConnection(CnSt);
+    //     public void Add(ULApp ulapp)
+    //     {
+    //         cn.Open();
+    //         int p = ulapp.payed ? 1 : 0;
+    //         string cm = $"insert into ULeftApp(dataplayed,payed,appid) values('{ulapp.datepayed.Date}',{p},{ulapp.appid})";
+    //         SqlCommand cd = new SqlCommand(cm, cn);
+    //         cd.ExecuteNonQuery();
+    //         cn.Close();
+    //     }
+
+    //     public List<IULApp> Select(string pname, string value)
+    //     {
+    //         cn.Open();
+    //         string cm = $"select * from ULeftApp where " + pname + "=" + value;
+    //         SqlCommand cd = new SqlCommand(cm, cn);
+    //         SqlDataReader r = cd.ExecuteReader();
+    //         cn.Close();
+    //         return null;
+    //     }
+
+    //     public List<IULApp> Select()
+    //     {
+    //         throw new NotImplementedException();
+    //     }
+    // }
+    // interface IULApp
+    // {
+    //     int id { get; set; }
+    //     DateTime datepayed { get; set; }
+    //     bool payed { get; set; }
+    //     int appid { get; set; }
+    //     List<IULApp> Select();
+    //     void Add(ULApp ulapp);
+    // }
 }

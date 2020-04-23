@@ -66,14 +66,15 @@ namespace CABS
                             Console.WriteLine("id\tFullName\tFamily Status\tAge\tNationality\tGender\tIdentity Card's numbers");
                             foreach (var x in li)
                             {
-                                Console.WriteLine("=======================================================================================");
                                 Console.WriteLine($"{x.id}\t{x.FullName}\t{x.FStatus}\t{x.Age}\t{x.CityZone}\t{x.Gender}\t{x.ICNum}");
+                                Console.WriteLine("=======================================================================================");
                                 Console.WriteLine("\tid\tCreditSum\tCreditGoal\tCreditDeadLine\tPayment");
+                                Console.WriteLine("=======================================================================================");
                                 foreach (var z in up.SelectAll())
                                 {
                                     Console.WriteLine($"\t{z.id}\t{z.CreditSum}\t{z.CreditGoal}\t{z.CreditDeadLine}\t{z.Pay}");
+                                    Console.WriteLine("=======================================================================================");
                                 }
-                                Console.WriteLine("=======================================================================================");
                             }
                         }
                         break;
@@ -202,6 +203,7 @@ namespace CABS
                     Console.WriteLine($"ID\tCreditSum\tCreditDeadline\tCreditStatus");
                     foreach (var x in li)
                     {
+                        System.Console.WriteLine("====================================");
                         string acpd = x.Status ? "aceped" : "canceled";
                         Console.WriteLine($"{x.id}\t{x.CreditSum}\t{x.CreditDeadLine}\t{acpd}");
                         System.Console.WriteLine("====================================");
@@ -214,6 +216,7 @@ namespace CABS
                     Console.WriteLine($"ID\tCreditSum\tCreditDeadline\tCreditStatus");
                     foreach (var x in li)
                     {
+                        System.Console.WriteLine("====================================");
                         Console.WriteLine($"{x.id}\t{x.CreditSum}\t{x.CreditDeadLine}\t{x.Status}");
                         System.Console.WriteLine("====================================");
                         UGraph ug = new UGraph();
@@ -221,6 +224,38 @@ namespace CABS
                         Console.WriteLine("\tId\tPer Month\tMonths");
                         Console.WriteLine($"\t{ug.id}\t{ug.PMonth}\t{ug.Months}");
                         System.Console.WriteLine("====================================");
+                    }
+                    Console.WriteLine("Do you have money for paying this month?Y/N");
+                    char ches = char.Parse(Console.ReadKey().KeyChar.ToString().ToLower());
+                    Console.WriteLine();
+                    if (ches == 'y')
+                    {
+                    d1:
+                        Console.WriteLine("Enter ID of app from sight graph");
+                        int id = 0;
+                        try
+                        {
+                            id = int.Parse(Console.ReadLine());
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Please choose number");
+                            goto d1;
+                        }
+                        SqlConnection cn = new SqlConnection(@"Data Source = localhost;Initial Catalog = CADB; Integrated Security=True;");
+                        cn.Open();
+                        string cm = $"select * from U_Graph where id={id}";
+                        SqlCommand cd = new SqlCommand(cm, cn);
+                        SqlDataReader r = cd.ExecuteReader();
+                        string cmd = "";
+                        while (r.Read())
+                        {
+                            cmd = $"update U_Graph set Months = {int.Parse(r.GetValue("Months").ToString()) - 1} where id = {id}";
+                        }
+                        r.Close();
+                        cd.CommandText = cmd;
+                        cd.ExecuteNonQuery();
+                        cn.Close();
                     }
                 }
                 else
