@@ -157,16 +157,17 @@ namespace CABS.Models
     {
         public int id { get; set; }
         public int UId { get; set; }
+        public double Pay { get; set; }
         public double CreditSum { get; set; }
         public bool Status { get; set; }
         public string CreditGoal { get; set; }
-        public DateTime CreditDeadLine { get; set; }
+        public string CreditDeadLine { get; set; }
 
         private SqlConnection cn = new SqlConnection(CnSt);
         public void Add(UApp ua)
         {
             cn.Open();
-            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine,Status) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine.Date}',{ua.Status});";
+            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine,Status,Pay) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine}',{ua.Status},{ua.Pay});";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();
@@ -196,8 +197,9 @@ namespace CABS.Models
                     UId = int.Parse(r.GetValue("UId").ToString()),
                     CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
-                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString()),
-                    Status = bool.Parse(r.GetValue("Status").ToString())
+                    CreditDeadLine = r.GetValue("CreditDeadLine").ToString(),
+                    Status = bool.Parse(r.GetValue("Status").ToString()),
+                    Pay = double.Parse(r.GetValue("Pay").ToString())
                 });
             }
             cn.Close();
@@ -207,7 +209,7 @@ namespace CABS.Models
         public UApp SingleById(int? id)
         {
             cn.Open();
-            string cm = $"select * from U_App where id = {id}";
+            string cm = $"select * from U_App where UId = {id}";
             SqlCommand cd = new SqlCommand(cm, cn);
             SqlDataReader r = cd.ExecuteReader();
             UApp ml = new UApp();
@@ -219,9 +221,33 @@ namespace CABS.Models
                     UId = int.Parse(r.GetValue("UId").ToString()),
                     CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
-                    CreditDeadLine = DateTime.Parse(r.GetValue("CreditDeadLine").ToString()),
-                    Status = bool.Parse(r.GetValue("Status").ToString())
+                    CreditDeadLine = r.GetValue("CreditDeadLine").ToString(),
+                    Status = bool.Parse(r.GetValue("Status").ToString()),
+                    Pay = double.Parse(r.GetValue("Pay").ToString())
                 };
+            }
+            cn.Close();
+            return ml;
+        }
+        public List<UApp> SingleAllById(int? id)
+        {
+            cn.Open();
+            string cm = $"select * from U_App where UId = {id}";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            SqlDataReader r = cd.ExecuteReader();
+            List<UApp> ml = new List<UApp>();
+            while (r.Read())
+            {
+                ml.Add(new UApp()
+                {
+                    id = int.Parse(r.GetValue("id").ToString()),
+                    UId = int.Parse(r.GetValue("UId").ToString()),
+                    CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
+                    CreditGoal = r.GetValue("CreditGoal").ToString(),
+                    CreditDeadLine = r.GetValue("CreditDeadLine").ToString(),
+                    Status = bool.Parse(r.GetValue("Status").ToString()),
+                    Pay = double.Parse(r.GetValue("Pay").ToString())
+                });
             }
             cn.Close();
             return ml;

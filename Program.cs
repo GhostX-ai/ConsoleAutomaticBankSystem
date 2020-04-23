@@ -17,29 +17,81 @@ namespace CABS
                 {
                     ClientPart();
                 }
+                else if (ua.Role == "Admin")
+                {
+                    AdminPart();
+                }
             }
         }
 
-        private static void CountP()
+        private static void AdminPart()
         {
             
         }
+
+        private static bool CountP()
+        {
+            UApp uap = new UApp();
+            uap = uap.SingleById(ua.id);
+            int points = 0;
+            points += ua.Gender.ToLower() == "m" ? 1 : 2;
+            points += ua.FStatus.ToLower() == "married" ? 2 : ua.FStatus == "single" ? 1 : ua.FStatus == "break up" ? 1 : 2;
+            points += ua.Age <= 25 ? 0 : ua.Age <= 35 ? 1 : ua.Age <= 62 ? 2 : 1;
+            points += ua.CityZone.ToLower() == "tajikistan" ? 1 : 0;
+            if (uap.Pay * 0.8 > uap.CreditSum) { points += 4; }
+            if (uap.Pay * 0.8 <= uap.CreditSum && uap.Pay * 1.5 > uap.CreditSum) { points += 3; }
+            if (uap.Pay * 1.5 <= uap.CreditSum && uap.Pay * 2.5 >= uap.CreditSum) { points += 2; }
+            if (uap.Pay * 2.5 < uap.CreditSum) { points += 1; }
+            points += uap.CreditGoal.ToLower() == "for phone" ? 0 : uap.CreditGoal.ToLower() == "equipment" ? 1 : uap.CreditGoal.ToLower() == "repairs" ? 1 : 0;
+            points += uap.CreditDeadLine == "more 12" ? 1 : 1;
+            var li = uap.SingleAllById(ua.id);
+            int s = 0;
+            foreach (var x in li)
+            {
+                if (x.Status == true)
+                {
+                    s++;
+                }
+            }
+            points += s > 3 ? 2 : s >= 1 && s <= 2 ? -1 : 0;
+            return points >= 12;
+        }
         private static void ClientPart()
         {
-            Console.Write($"Welcome {ua.FullName}\n1 for add an application\n2 for show your history of applications\n3 for Exit\n");
-            int chs = int.Parse(Console.ReadLine());
-            if (chs == 1)
+            while (true)
             {
-                UApp uapp = new UApp();
-                Console.Write("Credit sum:");
-                uapp.CreditSum = double.Parse(Console.ReadLine());
-                Console.Write("Credit goal:");
-                uapp.CreditGoal = Console.ReadLine();
-                Console.Write("Credit deadline(yyyy-MM-dd)");
-                uapp.CreditDeadLine = DateTime.Parse(Console.ReadLine());
-                uapp.UId = ua.id;
-
-                uapp.Add(uapp);
+                Console.Write($"Welcome {ua.FullName}\n1 for add an application\n2 for show your history of applications\n3 for Exit\n");
+                int chs = int.Parse(Console.ReadLine());
+                if (chs == 1)
+                {
+                    UApp uapp = new UApp();
+                    Console.Write("Credit sum:");
+                    uapp.CreditSum = double.Parse(Console.ReadLine());
+                    Console.Write("Credit goal:");
+                    uapp.CreditGoal = Console.ReadLine();
+                    Console.Write("Credit deadline(until 12\\more 12)");
+                    uapp.CreditDeadLine = Console.ReadLine();
+                    uapp.UId = ua.id;
+                    uapp.Status = CountP();
+                    uapp.Add(uapp);
+                    string acceped = uapp.Status ? "aceped" : "refused";
+                    Console.WriteLine($"You credit status {}");
+                }
+                else if (chs == 2)
+                {
+                    UApp uapp = new UApp();
+                    var li = uapp.SingleAllById(ua.id);
+                    Console.WriteLine($"ID\tCreditSum\tCreditDeadline\nCreditStatus");
+                    foreach (var x in li)
+                    {
+                        Console.WriteLine($"{x.id}\t{x.CreditSum}\t{x.CreditDeadLine}\t{x.Status}");
+                        System.Console.WriteLine("====================================");
+                    }
+                }
+                else
+                {
+                    break;
+                }
             }
         }
 
