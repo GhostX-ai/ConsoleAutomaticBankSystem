@@ -161,7 +161,7 @@ namespace CABS.Models
         public double CreditSum { get; set; }
         public bool Status { get; set; }
         public string CreditGoal { get; set; }
-        public string CreditDeadLine { get; set; }
+        public double CreditDeadLine { get; set; }
 
         private SqlConnection cn = new SqlConnection(CnSt);
         public void Add(UApp ua)
@@ -198,7 +198,7 @@ namespace CABS.Models
                     UId = int.Parse(r.GetValue("UId").ToString()),
                     CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
-                    CreditDeadLine = r.GetValue("CreditDeadLine").ToString(),
+                    CreditDeadLine = double.Parse(r.GetValue("CreditDeadLine").ToString()),
                     Status = bool.Parse(r.GetValue("Status").ToString()),
                     Pay = double.Parse(r.GetValue("Pay").ToString())
                 });
@@ -222,7 +222,7 @@ namespace CABS.Models
                     UId = int.Parse(r.GetValue("UId").ToString()),
                     CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
-                    CreditDeadLine = r.GetValue("CreditDeadLine").ToString(),
+                    CreditDeadLine = double.Parse(r.GetValue("CreditDeadLine").ToString()),
                     Status = bool.Parse(r.GetValue("Status").ToString()),
                     Pay = double.Parse(r.GetValue("Pay").ToString())
                 };
@@ -245,7 +245,7 @@ namespace CABS.Models
                     UId = int.Parse(r.GetValue("UId").ToString()),
                     CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
-                    CreditDeadLine = r.GetValue("CreditDeadLine").ToString(),
+                    CreditDeadLine = double.Parse(r.GetValue("CreditDeadLine").ToString()),
                     Status = bool.Parse(r.GetValue("Status").ToString()),
                     Pay = double.Parse(r.GetValue("Pay").ToString())
                 });
@@ -269,7 +269,7 @@ namespace CABS.Models
         double CreditSum { get; set; }
         bool Status { get; set; }
         string CreditGoal { get; set; }
-        string CreditDeadLine { get; set; }
+        double CreditDeadLine { get; set; }
         void Add(UApp ua);
         List<UApp> SelectAll();
         UApp SingleById(int? id);
@@ -325,7 +325,7 @@ namespace CABS.Models
         public UGraph SingleById(int? id)
         {
             cn.Open();
-            string cm = $"select * from U_Graph where id = {id}";
+            string cm = $"select * from U_Graph where U_AppId = {id}";
             SqlCommand cd = new SqlCommand(cm, cn);
             SqlDataReader r = cd.ExecuteReader();
             UGraph ml = new UGraph();

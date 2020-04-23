@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Reflection;
 using CABS.Models;
 namespace CABS
@@ -95,7 +97,7 @@ namespace CABS
             if (uap.Pay * 1.5 <= uap.CreditSum && uap.Pay * 2.5 >= uap.CreditSum) { points += 2; }
             if (uap.Pay * 2.5 < uap.CreditSum) { points += 1; }
             points += uap.CreditGoal.ToLower() == "for phone" ? 0 : uap.CreditGoal.ToLower() == "equipment" ? 1 : uap.CreditGoal.ToLower() == "repairs" ? 1 : 0;
-            points += uap.CreditDeadLine == "more 12" ? 1 : 1;
+            points += uap.CreditDeadLine < 12 ? 1 : 1;
             var li = uap.SingleAllById(ua.id);
             int s = 0;
             foreach (var x in li)
@@ -112,8 +114,8 @@ namespace CABS
         {
             while (true)
             {
-                x2:
-                Console.Write($"Welcome {ua.FullName}\n1 for add an application\n2 for show your history of applications\n3 for Exit\n");
+            x2:
+                Console.Write($"Welcome {ua.FullName}\n1 for add an application\n2 for show your history of applications\n3-for show your aceped apps with graphic\n4 for Exit\n");
                 int chs = 0;
                 try
                 {
@@ -140,8 +142,8 @@ namespace CABS
                     }
                     Console.Write("Credit goal:");
                     uapp.CreditGoal = Console.ReadLine();
-                    Console.Write("Credit deadline(until 12\\more 12)");
-                    uapp.CreditDeadLine = Console.ReadLine();
+                    Console.Write("How many month do you need?");
+                    uapp.CreditDeadLine = double.Parse(Console.ReadLine());
                     uapp.UId = ua.id;
                 c2:
                     Console.Write("You payment:");
@@ -156,7 +158,39 @@ namespace CABS
                     }
                     bool st = CountP(uapp);
                     uapp.Status = st;
+                    uapp.UId = ua.id;
                     uapp.Add(uapp);
+                    if (uapp.Status)
+                    {
+                        double pmonth = uapp.CreditSum / uapp.CreditDeadLine;
+                        SqlConnection cn = new SqlConnection(@"Data Source = localhost;Initial Catalog = CADB; Integrated Security=True;");
+                        cn.Open();
+                        string cm = $"select * from U_App where UId = { ua.id } and CreditGoal = '{uapp.CreditGoal}' and CreditDeadLine = {uapp.CreditDeadLine}";
+                        SqlCommand cd = new SqlCommand(cm, cn);
+                        SqlDataReader r = cd.ExecuteReader();
+                        UApp ml = new UApp();
+                        while (r.Read())
+                        {
+                            ml = new UApp()
+                            {
+                                id = int.Parse(r.GetValue("id").ToString()),
+                                UId = int.Parse(r.GetValue("UId").ToString()),
+                                CreditSum = double.Parse(r.GetValue("CreditSum").ToString()),
+                                CreditGoal = r.GetValue("CreditGoal").ToString(),
+                                CreditDeadLine = double.Parse(r.GetValue("CreditDeadLine").ToString()),
+                                Status = bool.Parse(r.GetValue("Status").ToString()),
+                                Pay = double.Parse(r.GetValue("Pay").ToString())
+                            };
+                        }
+                        cn.Close();
+                        UGraph ug = new UGraph()
+                        {
+                            PMonth = pmonth,
+                            Months = uapp.CreditDeadLine,
+                            U_AppId = ml.id
+                        };
+                        ug.Add(ug);
+                    }
                     string acceped = uapp.Status ? "aceped" : "refused";
                     Console.ForegroundColor = uapp.Status ? ConsoleColor.Green : ConsoleColor.Red;
                     Console.WriteLine($"You credit status {acceped}");
@@ -166,10 +200,27 @@ namespace CABS
                 {
                     UApp uapp = new UApp();
                     var li = uapp.SingleAllById(ua.id);
-                    Console.WriteLine($"ID\tCreditSum\tCreditDeadline\nCreditStatus");
+                    Console.WriteLine($"ID\tCreditSum\tCreditDeadline\tCreditStatus");
+                    foreach (var x in li)
+                    {
+                        string acpd = x.Status ? "aceped" : "canceled";
+                        Console.WriteLine($"{x.id}\t{x.CreditSum}\t{x.CreditDeadLine}\t{acpd}");
+                        System.Console.WriteLine("====================================");
+                    }
+                }
+                else if (chs == 3)
+                {
+                    UApp uapp = new UApp();
+                    var li = uapp.SingleAllById(ua.id);
+                    Console.WriteLine($"ID\tCreditSum\tCreditDeadline\tCreditStatus");
                     foreach (var x in li)
                     {
                         Console.WriteLine($"{x.id}\t{x.CreditSum}\t{x.CreditDeadLine}\t{x.Status}");
+                        System.Console.WriteLine("====================================");
+                        UGraph ug = new UGraph();
+                        ug = ug.SingleById(x.id);
+                        Console.WriteLine("\tId\tPer Month\tMonths");
+                        Console.WriteLine($"\t{ug.id}\t{ug.PMonth}\t{ug.Months}");
                         System.Console.WriteLine("====================================");
                     }
                 }
