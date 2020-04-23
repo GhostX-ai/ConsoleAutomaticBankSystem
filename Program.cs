@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using CABS.Models;
 namespace CABS
 {
@@ -9,6 +10,7 @@ namespace CABS
         static void Main()
         {
             Welcoming();
+            CountP();
             if (ua != null)
             {
                 if (ua.Role == "Client")
@@ -18,6 +20,10 @@ namespace CABS
             }
         }
 
+        private static void CountP()
+        {
+            
+        }
         private static void ClientPart()
         {
             Console.Write($"Welcome {ua.FullName}\n1 for add an application\n2 for show your history of applications\n3 for Exit\n");
@@ -32,6 +38,7 @@ namespace CABS
                 Console.Write("Credit deadline(yyyy-MM-dd)");
                 uapp.CreditDeadLine = DateTime.Parse(Console.ReadLine());
                 uapp.UId = ua.id;
+
                 uapp.Add(uapp);
             }
         }

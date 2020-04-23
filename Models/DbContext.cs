@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
+
 namespace CABS.Models
 {
     class SCS
@@ -335,4 +337,58 @@ namespace CABS.Models
         void Delete(int? id);
         void Update(UGraph ua, int? id);
     }
+    // class UAppP : SCS, IUAppP
+    // {
+    //     public int id { get; set; }
+    //     public string Condition { get; set; }
+    //     public int Point { get; set; }
+    //     public string PName { get; set; }
+    //     private SqlConnection cn = new SqlConnection(CnSt);
+    //     public List<UAppP> SelectAll()
+    //     {
+    //         cn.Open();
+    //         string cm = $"select * from U_App_P";
+    //         SqlCommand cd = new SqlCommand(cm, cn);
+    //         SqlDataReader r = cd.ExecuteReader();
+    //         List<UAppP> li = new List<UAppP>();
+    //         while (r.Read())
+    //         {
+    //             li.Add(new UAppP()
+    //             {
+    //                 id = int.Parse(r.GetValue("id").ToString()),
+    //                 Condition = r.GetValue("Condition").ToString(),
+    //                 Point = int.Parse(r.GetValue("Point").ToString()),
+    //                 PName = r.GetValue("PName").ToString()
+    //             });
+    //         }
+    //         cn.Close();
+    //         return li;
+    //     }
+    //     public UAppP SelectOne(int? uid)
+    //     {
+    //         cn.Open();
+    //         string cm = $"select * from U_App_P where ";
+    //         SqlCommand cd = new SqlCommand(cm, cn);
+    //         SqlDataReader r = cd.ExecuteReader();
+    //         UAppP ml = new UAppP();
+    //         while (r.Read())
+    //         {
+    //             ml = new UAppP()
+    //             {
+    //                 id = int.Parse(r.GetValue("id").ToString()),
+    //                 Condition = r.GetValue("Condition").ToString(),
+    //                 Point = int.Parse(r.GetValue("Point").ToString()),
+    //                 PName = r.GetValue("PName").ToString()
+    //             };
+    //         }
+    //         cn.Close();
+    //         return ml;
+    //     }
+    // }
+    // interface IUAppP
+    // {
+    //     int id { get; set; }
+    //     string Condition { get; set; }
+    //     int Point { get; set; }
+    // }
 }
