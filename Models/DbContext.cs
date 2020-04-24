@@ -27,8 +27,10 @@ namespace CABS.Models
         private SqlConnection cn = new SqlConnection(CnSt);
         public void Add(UAccaount ua)
         {
+            Random ran = new Random();
             cn.Open();
-            string cm = $"insert into U_Accaunt(RoleId,Fullname,Gender,FStatus,Age,CityZone,Login,Password,ICard) Values({ua.RoleId},'{ua.FullName}','{ua.Gender}','{ua.FStatus}',{ua.Age},'{ua.CityZone}',{ua.Login},'{ua.Password}','{ua.ICNum}');";
+            ua.id = ran.Next(0, 1000000);
+            string cm = $"insert into U_Accaunt(id,RoleId,Fullname,Gender,FStatus,Age,CityZone,Login,Password,ICard) Values({ua.id},{ua.RoleId},'{ua.FullName}','{ua.Gender}','{ua.FStatus}',{ua.Age},'{ua.CityZone}',{ua.Login},'{ua.Password}','{ua.ICNum}');";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();

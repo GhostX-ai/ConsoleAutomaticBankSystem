@@ -91,13 +91,13 @@ namespace CABS
                             Console.WriteLine("id\tFullName\tFamily Status\tAge\tNationality\tGender\tIdentity Card's numbers");
                             foreach (var x in li)
                             {
-                                Console.WriteLine($"{x.id}\t{x.FullName}\t{x.FStatus}\t{x.Age}\t{x.CityZone}\t{x.Gender}\t{x.ICNum}");
+                                Console.WriteLine($"{x.id}\t\t{x.FullName}\t\t{x.FStatus}\t\t{x.Age}\t\t{x.CityZone}\t\t{x.Gender}\t\t{x.ICNum}");
                                 Console.WriteLine("=======================================================================================");
                                 Console.WriteLine("\tid\tCreditSum\tCreditGoal\tCreditDeadLine\tPayment\tPayed");
                                 Console.WriteLine("=======================================================================================");
                                 foreach (var z in up.SelectAll())
                                 {
-                                    Console.WriteLine($"\t{z.id}\t{z.CreditSum}\t{z.CreditGoal}\t{z.CreditDeadLine}\t{z.Pay}\t{z.Done}");
+                                    Console.WriteLine($"\t{z.id}\t\t{z.CreditSum}\t\t{z.CreditGoal}\t\t{z.CreditDeadLine}\t\t{z.Pay}\t\t{z.Done}");
                                     Console.WriteLine("=======================================================================================");
                                 }
                             }
@@ -159,7 +159,7 @@ namespace CABS
                     Console.Write("Credit sum:");
                     try
                     {
-                        uapp.CreditSum = double.Parse(Console.ReadLine()) / 100 * 20;
+                        uapp.CreditSum = (double.Parse(Console.ReadLine()));
                     }
                     catch
                     {
@@ -230,7 +230,7 @@ namespace CABS
                     {
                         System.Console.WriteLine("====================================");
                         string acpd = x.Status ? "aceped" : "canceled";
-                        Console.WriteLine($"{x.id}\t{x.CreditSum}\t{x.CreditDeadLine}\t{acpd}");
+                        Console.WriteLine($"{x.id}\t\t{x.CreditSum}\t\t{x.CreditDeadLine}\t\t{acpd}");
                         System.Console.WriteLine("====================================");
                     }
                 }
@@ -238,16 +238,16 @@ namespace CABS
                 {
                     UApp uapp = new UApp();
                     var li = uapp.SingleAllById(ua.id);
-                    Console.WriteLine($"ID\tCreditSum\tCreditDeadline\tCreditStatus");
+                    Console.WriteLine($"ID\tCreditSum\tCreditDeadline\tCreditStatus\tPayed");
                     foreach (var x in li)
                     {
                         System.Console.WriteLine("====================================");
-                        Console.WriteLine($"{x.id}\t{x.CreditSum}\t{x.CreditDeadLine}\t{x.Status}");
+                        Console.WriteLine($"{x.id}\t\t{x.CreditSum}\t\t{x.CreditDeadLine}\t{x.Status}\t\t{x.Done}");
                         System.Console.WriteLine("====================================");
                         UGraph ug = new UGraph();
                         ug = ug.SingleById(x.id);
                         Console.WriteLine("\tId\tPer Month\tMonths");
-                        Console.WriteLine($"\t{ug.id}\t{ug.PMonth}\t{ug.Months}");
+                        Console.WriteLine($"\t{ug.id}\t{ug.PMonth}\t\t{ug.Months}");
                         System.Console.WriteLine("====================================");
                     }
                     Console.WriteLine("Do you have money for paying this month?Y/N");
