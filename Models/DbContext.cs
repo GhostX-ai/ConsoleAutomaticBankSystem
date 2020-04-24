@@ -162,13 +162,13 @@ namespace CABS.Models
         public bool Status { get; set; }
         public string CreditGoal { get; set; }
         public double CreditDeadLine { get; set; }
+        public bool Done { get; set; }
 
         private SqlConnection cn = new SqlConnection(CnSt);
         public void Add(UApp ua)
         {
             cn.Open();
-            int x = ua.Status ? 1 : 0;
-            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine,Status,Pay) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine}',{x},{ua.Pay});";
+            string cm = $"insert into U_App(UId,CreditSum,CreditGoal,CreditDeadLine,Status,Pay,Done) Values({ua.UId},{ua.CreditSum},'{ua.CreditGoal}','{ua.CreditDeadLine}','{ua.Status}',{ua.Pay},'False');";
             SqlCommand cd = new SqlCommand(cm, cn);
             cd.ExecuteNonQuery();
             cn.Close();
@@ -200,7 +200,8 @@ namespace CABS.Models
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
                     CreditDeadLine = double.Parse(r.GetValue("CreditDeadLine").ToString()),
                     Status = bool.Parse(r.GetValue("Status").ToString()),
-                    Pay = double.Parse(r.GetValue("Pay").ToString())
+                    Pay = double.Parse(r.GetValue("Pay").ToString()),
+                    Done = bool.Parse(r.GetValue("Done").ToString())
                 });
             }
             cn.Close();
@@ -224,7 +225,9 @@ namespace CABS.Models
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
                     CreditDeadLine = double.Parse(r.GetValue("CreditDeadLine").ToString()),
                     Status = bool.Parse(r.GetValue("Status").ToString()),
-                    Pay = double.Parse(r.GetValue("Pay").ToString())
+                    Pay = double.Parse(r.GetValue("Pay").ToString()),
+                    Done = bool.Parse(r.GetValue("Done").ToString())
+
                 };
             }
             cn.Close();
@@ -247,7 +250,9 @@ namespace CABS.Models
                     CreditGoal = r.GetValue("CreditGoal").ToString(),
                     CreditDeadLine = double.Parse(r.GetValue("CreditDeadLine").ToString()),
                     Status = bool.Parse(r.GetValue("Status").ToString()),
-                    Pay = double.Parse(r.GetValue("Pay").ToString())
+                    Pay = double.Parse(r.GetValue("Pay").ToString()),
+                    Done = bool.Parse(r.GetValue("Done").ToString())
+
                 });
             }
             cn.Close();
@@ -268,6 +273,7 @@ namespace CABS.Models
         int UId { get; set; }
         double CreditSum { get; set; }
         bool Status { get; set; }
+        bool Done { get; set; }
         string CreditGoal { get; set; }
         double CreditDeadLine { get; set; }
         void Add(UApp ua);

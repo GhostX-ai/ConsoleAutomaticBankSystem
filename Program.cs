@@ -12,6 +12,7 @@ namespace CABS
         static void Main()
         {
         x1:
+            CheckApp();
             Welcoming();
             if (ua != null)
             {
@@ -29,7 +30,31 @@ namespace CABS
                 goto x1;
             }
         }
-
+        static void CheckApp()
+        {
+            SqlConnection cn = new SqlConnection(@"Data Source = localhost;Initial Catalog = CADB; Integrated Security=True;");
+            cn.Open();
+            string cm = $"select * from U_Graph";
+            SqlCommand cd = new SqlCommand(cm, cn);
+            SqlDataReader r = cd.ExecuteReader();
+            string cmd = "";
+            while (r.Read())
+            {
+                if (r.GetValue("Months").ToString() == "0")
+                {
+                    UAppS(int.Parse(r.GetValue("U_AppId").ToString()));
+                }
+            }
+            r.Close();
+        }
+        static void UAppS(int? id)
+        {
+            SqlConnection cn = new SqlConnection(@"Data Source = localhost;Initial Catalog = CADB; Integrated Security=True;");
+            cn.Open();
+            string cmd = $"update U_App set Done = 'True' where id = {id}";
+            SqlCommand cd = new SqlCommand(cmd, cn);
+            cd.ExecuteNonQuery();
+        }
         private static void AdminPart()
         {
             while (true)
@@ -68,11 +93,11 @@ namespace CABS
                             {
                                 Console.WriteLine($"{x.id}\t{x.FullName}\t{x.FStatus}\t{x.Age}\t{x.CityZone}\t{x.Gender}\t{x.ICNum}");
                                 Console.WriteLine("=======================================================================================");
-                                Console.WriteLine("\tid\tCreditSum\tCreditGoal\tCreditDeadLine\tPayment");
+                                Console.WriteLine("\tid\tCreditSum\tCreditGoal\tCreditDeadLine\tPayment\tPayed");
                                 Console.WriteLine("=======================================================================================");
                                 foreach (var z in up.SelectAll())
                                 {
-                                    Console.WriteLine($"\t{z.id}\t{z.CreditSum}\t{z.CreditGoal}\t{z.CreditDeadLine}\t{z.Pay}");
+                                    Console.WriteLine($"\t{z.id}\t{z.CreditSum}\t{z.CreditGoal}\t{z.CreditDeadLine}\t{z.Pay}\t{z.Done}");
                                     Console.WriteLine("=======================================================================================");
                                 }
                             }
@@ -103,7 +128,7 @@ namespace CABS
             int s = 0;
             foreach (var x in li)
             {
-                if (x.Status == true)
+                if (x.Status == true && x.Done == true)
                 {
                     s++;
                 }
@@ -134,7 +159,7 @@ namespace CABS
                     Console.Write("Credit sum:");
                     try
                     {
-                        uapp.CreditSum = double.Parse(Console.ReadLine());
+                        uapp.CreditSum = double.Parse(Console.ReadLine()) / 100 * 20;
                     }
                     catch
                     {
